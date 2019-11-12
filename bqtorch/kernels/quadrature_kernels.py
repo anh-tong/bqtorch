@@ -38,7 +38,7 @@ class QuadratureRBFGaussPrior(QuadratureKernel):
         super().__init__(kernel)
         self.prior_mean = prior_mean
         self.prior_variance = prior_variance
-        self.input_dim = self.prior_mean.size()[0]
+        self.input_dim = self.prior_mean.size()[1]
 
     def qK(self, x):
 
@@ -56,7 +56,7 @@ class QuadratureRBFGaussPrior(QuadratureKernel):
         kernel_variance = self.kernel.outputscale
         kernel_lengthscale = self.kernel.base_kernel.lengthscale
 
-        det_factor = (self.prior_variance / kernel_lengthscale ** 2 + 1.).pow(self.input_dim / 2.)
+        det_factor = (2 * self.prior_variance / kernel_lengthscale ** 2 + 1.).pow(self.input_dim / 2.)
 
         return kernel_variance / det_factor
 
