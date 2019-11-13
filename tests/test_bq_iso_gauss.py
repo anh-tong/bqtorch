@@ -1,9 +1,7 @@
 import numpy as np
 import torch
 
-from gpytorch.likelihoods import GaussianLikelihood
 from gpytorch.kernels import ScaleKernel, RBFKernel
-from bqtorch.models.gp_regression import GP
 from bqtorch.kernels.quadrature_kernels import QuadratureRBFGaussPrior
 
 import pytest

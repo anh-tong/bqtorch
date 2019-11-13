@@ -1,6 +1,6 @@
 
 from gpytorch.models import ExactGP
-from gpytorch.means import ConstantMean
+from gpytorch.means import ConstantMean, ZeroMean
 from gpytorch.kernels import RBFKernel
 from gpytorch.distributions import MultivariateNormal
 
@@ -13,7 +13,7 @@ class GP(ExactGP):
                  likelihood
                  ):
         super().__init__(train_x, train_y, likelihood)
-        self.mean = ConstantMean()
+        self.mean = ZeroMean()
         self.covar = kernel
 
     def forward(self, x):

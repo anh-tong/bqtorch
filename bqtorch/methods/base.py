@@ -13,9 +13,9 @@ class BayesianQuadrature(object):
     def __init__(self, gp: GP) -> None:
         self.gp = gp
 
-    def optimize(self, *args) -> None:
+    def optimize(self, **kargs) -> None:
         """Optimize GP hyperparameters"""
-        optimze_gp(self.gp, *args)
+        optimze_gp(self.gp, **kargs)
 
     def integrate(self) -> Tuple[Tensor, Tensor]:
         raise NotImplementedError
@@ -52,23 +52,3 @@ class VanillaBQGaussPrior(BayesianQuadrature):
         integral_mean = torch.matmul(kernel_mean, mean_cache)
         integral_var = self.wrapped_kernel.qKq() - get_zKz(kernel_mean)
         return (integral_mean.squeeze(), integral_var.squeeze())
-
-
-if __name__ == '__main__':
-    from gpytorch.likelihoods import GaussianLikelihood
-    from gpytorch.kernels import ScaleKernel, RBFKernel
-    from bqtorch.models.gp_regression import GP
-
-    rbf = ScaleKernel(RBFKernel())
-    likelihood = GaussianLikelihood()
-    likelihood.noise = 0.01
-    prior_mean = torch.rand(1, 5)
-    prior_variance = 1.
-    x = torch.randn(5, 1)
-    y = torch.randn(5, )
-    gp = GP(x, y, rbf, likelihood)
-
-    bq = VanillaBQGaussPrior(gp, prior_mean, prior_variance)
-    bq.optimize()
-    integral = bq.integrate()
-    print(integral)
